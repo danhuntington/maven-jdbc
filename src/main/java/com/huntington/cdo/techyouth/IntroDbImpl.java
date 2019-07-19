@@ -52,4 +52,36 @@ public class IntroDbImpl implements IntroDb
 		
 	}
 	
+	@Override
+	public Customer getCustomer(int id)
+	{
+		Customer cust = new Customer();
+		
+		try
+		{
+			Statement stmt = conn.createStatement();
+			ResultSet rs =  stmt.executeQuery("select * from Customers where uid = " + id);
+			if (!rs.next())
+			{
+				return null;
+			}
+			
+			cust.setUid(rs.getInt("uid"));
+			cust.setFirstname(rs.getString("firstname"));
+			cust.setLastname(rs.getString("lastname"));
+			cust.setEmail(rs.getString("email"));
+		}
+		catch (SQLException sqlex)
+		{
+			sqlex.printStackTrace();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		System.out.println("Got customer <" + cust + ">");
+		return cust;
+	}
+	
 }

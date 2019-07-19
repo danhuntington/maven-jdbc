@@ -13,11 +13,8 @@ public class ApplicationRunner
 
 		try 
 		{
-			//Registering the HSQLDB JDBC driver
-			Class.forName("org.hsqldb.jdbc.JDBCDriver");
-			
-			//Creating the connection with HSQLDB
-			conn = DriverManager.getConnection("jdbc:hsqldb:mem:introdb", "SA", "");
+			conn = DbConnectionFactory.getInstance().getConnection();
+				
 			if (conn != null)
 			{
 				System.out.println("Connection created successfully");
@@ -36,6 +33,7 @@ public class ApplicationRunner
 		
 		IntroDb app = new IntroDbImpl(conn);
 		app.listAllCustomers();
+		app.getCustomer(1001);
 		
 		try
 		{
