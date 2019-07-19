@@ -2,28 +2,41 @@ package com.huntington.cdo.techyouth;
 
 import org.junit.Before;
 import org.junit.Test;
-import junit.framework.Assert;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
+@RunWith(MockitoJUnitRunner.class)
 public class IntroDbTest 
 {
-	private IntroDb app;
-	private Connection conn = null;
+	@InjectMocks
+	private IntroDbImpl app;
 	
+	@Mock
+    private Connection conn;
+	
+    @Mock
+    private Statement stmt;
+    
+    @Captor
+    ArgumentCaptor<String> argCaptor;
+
+    @Mock
+    private ResultSet rs;
+
 	@Before
 	public void initialize()
 	{
-		try
-		{
-			Class.forName("org.hsqldb.jdbc.JDBCDriver");
-			conn = DriverManager.getConnection("jdbc:hsqldb:mem:introdb", "SA", "");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
+		MockitoAnnotations.initMocks(this);
 		
 		app = new IntroDbImpl(conn);
 	}
@@ -31,6 +44,21 @@ public class IntroDbTest
 	@Test
 	public void test() throws Exception 
 	{
+		Mockito.when(conn.createStatement()).thenReturn(stmt);
+		Mockito.when(stmt.executeUpdate(argCaptor.capture())).thenReturn(1);
+		Mockito.when(stmt.executeQuery(Mockito.anyString())).thenReturn(rs);
+		Mockito.when(rs.getString(Mockito.anyString())).thenReturn("name");
+		Mockito.when(rs.next()).thenReturn(true).thenReturn(true).thenReturn(true).thenReturn(false);
+		
 		app.listAllCustomers();
+
+		Mockito.verify(conn, Mockito.times(1)).createStatement();
+		Mockito.verify(stmt, Mockito.times(4)).executeUpdate(Mockito.anyString());
+		
+		for (String argval : argCaptor.getAllValues())
+		{
+			System.out.println(argval);
+		}
+		
 	}
 }

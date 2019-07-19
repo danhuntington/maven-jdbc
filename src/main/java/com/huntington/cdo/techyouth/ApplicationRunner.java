@@ -15,6 +15,7 @@ public class ApplicationRunner
 		{
 			//Registering the HSQLDB JDBC driver
 			Class.forName("org.hsqldb.jdbc.JDBCDriver");
+			
 			//Creating the connection with HSQLDB
 			conn = DriverManager.getConnection("jdbc:hsqldb:mem:introdb", "SA", "");
 			if (conn != null)

@@ -29,7 +29,7 @@ public class IntroDbImpl implements IntroDb
 			stmt.executeUpdate(CREATE_TABLE_SQL);
 			stmt.executeUpdate("INSERT INTO Customers " + "VALUES (1001, 'Simpson', 'Bob', 'simpson@gmail.com')");
 			stmt.executeUpdate("INSERT INTO Customers " + "VALUES (1002, 'Jones', 'Janet', 'jj@gmail.com')");
-			stmt.executeUpdate("INSERT INTO Customers " + "VALUES (1003, 'Richardson', 'Ron.', 'r2@gmail.com')");
+			stmt.executeUpdate("INSERT INTO Customers " + "VALUES (1003, 'Richardson', 'Ronald', 'r2@gmail.com')");
             ResultSet rs =  stmt.executeQuery("select * from Customers");
              
             // Loop through the data and print all artist names
@@ -37,6 +37,8 @@ public class IntroDbImpl implements IntroDb
 			{
                 //System.out.println("Customer Name: " + rs.getString("FIRSTNAME") + " " + rs.getString("LASTNAME"));
 				System.out.println("Customer Name: " + rs.getString("FIRSTNAME") + " " + rs.getString("LASTNAME"));
+				Customer cust = new Customer();
+				//cust.setLastName(rs.getString("LASTNAME"));
             }
              
             // Clean up
